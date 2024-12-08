@@ -1,0 +1,15 @@
+Feature,Anomaly,Correlation
+Q_edge1,Anomaly_edge1,-0.3679505148097437
+P_edge1,Anomaly_edge1,0.39635266913939105
+Q_edge2,Anomaly_edge2,-0.3434241946428158
+P_edge2,Anomaly_edge2,0.39708254729974407
+Q_edge3,Anomaly_edge3,-0.36284632146018536
+P_edge3,Anomaly_edge3,0.3504591434780151
+Q_edge4,Anomaly_edge4,-0.3399041176601606
+P_edge4,Anomaly_edge4,0.43992625067748425
+Q_edge5,Anomaly_edge5,-0.3086151692858701
+P_edge5,Anomaly_edge5,0.35709075773689425
+Q_edge6,Anomaly_edge6,-0.29808991030659804
+P_edge6,Anomaly_edge6,0.38279033301992155
+Q_edge7,Anomaly_edge7,-0.39370460645213906
+P_edge7,Anomaly_edge7,0.4629804809188699
