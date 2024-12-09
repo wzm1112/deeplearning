@@ -25,12 +25,12 @@ def main():
         [0, 1, 1, 2, 2, 2, 4],  # 起点索引
         [1, 2, 3, 3, 4, 5, 5]   # 终点索引
     ], dtype=torch.long)
-    node_feature_dim = 8  # 节点特征维度
-    hidden_dim = 8  # 隐藏层维度
-    additional_epochs = 10000  # 总训练轮数
+    node_feature_dim = 16  # 节点特征维度
+    hidden_dim = 16  # 隐藏层维度
+    additional_epochs = 5000  # 总训练轮数
     update_interval = 500  # 每 500 次更新模型
-    initial_model_path = "../modelsByQ/gcn_model_r_features.pth"  # 初始模型路径
-    updated_model_path = "../GCNByR/gcn_model.pth"  # 更新模型保存路径
+    initial_model_path = "../GCNByR/gcn_model_hidden.pth"  # 初始模型路径
+    updated_model_path = "../GCNByR/gcn_model_hidden.pth"  # 更新模型保存路径
 
     # 加载数据并构建图数据对象
     ventilation_data, X, label_mapping = load_and_process_data(file_path, selected_features, label_column)

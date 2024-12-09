@@ -120,7 +120,7 @@ except FileNotFoundError:
 model.train()
 
 # 设置训练轮数
-new_epochs = 2000
+new_epochs = 1
 save_interval = 500  # 每 500 次保存一次模型
 losses = []
 

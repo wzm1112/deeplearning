@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
+import numpy as np
 
 # 数据加载与清洗
 file_path = '../datasets/es[7]-vs[6]-random-train.csv'  # 替换为实际路径
@@ -33,15 +34,7 @@ edge_index = torch.tensor([
 ], dtype=torch.long)
 
 # 构建多状态图数据对象
-num_states = X.shape[0]
 edge_attr = torch.tensor(X.values, dtype=torch.float)
-
-# 确保 edge_attr 的形状与边数量匹配
-if edge_attr.shape[0] == 1 and edge_attr.shape[1] == len(edge_index[0]):
-    edge_attr = edge_attr.T
-elif edge_attr.dim() == 1:
-    edge_attr = edge_attr.unsqueeze(1)
-
 node_features = torch.ones((6, 1))
 
 # 构造图数据对象
@@ -100,7 +93,7 @@ except FileNotFoundError:
 model.train()
 
 # 设置训练轮数
-new_epochs = 2000  # 继续训练的轮数
+new_epochs = 20  # 继续训练的轮数
 save_interval = 500  # 每 500 次保存一次模型
 losses = []
 
@@ -116,11 +109,6 @@ for epoch in range(1, new_epochs + 1):  # 继续训练
     if epoch % 10 == 0:
         print(f"Epoch {epoch}/{new_epochs}, Loss: {loss.item():.4f}")
 
-    # 保存模型
-    if epoch % save_interval == 0:
-        torch.save(model.state_dict(), model_save_path)
-        print(f"Model updated and saved at epoch {epoch} to {model_save_path}")
-
 # 保存最终模型
 torch.save(model.state_dict(), model_save_path)
 print(f"Final model saved to {model_save_path}")
@@ -130,7 +118,7 @@ plt.figure(figsize=(12, 6))
 plt.plot(range(1, new_epochs + 1), losses, label="Training Loss", color="blue")
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
-plt.title("Training Loss Curve (Continued Training)")
+plt.title("Training Loss Curve")
 plt.legend()
 plt.grid(True)
 plt.show()
@@ -149,18 +137,52 @@ mse = mean_squared_error(true_values, predictions)
 mae = mean_absolute_error(true_values, predictions)
 r2 = r2_score(true_values, predictions)
 
-print("Evaluation Results (After Continued Training):")
+print("Evaluation Results:")
 print(f"Mean Squared Error (MSE): {mse:.4f}")
 print(f"Mean Absolute Error (MAE): {mae:.4f}")
 print(f"R-squared (R2): {r2:.4f}")
 
-# 可视化真实值和预测值
+# 可视化 1: 真实值 vs 预测值
 plt.figure(figsize=(10, 6))
 plt.scatter(range(len(true_values)), true_values[:, 0], label="True Values", color="blue", alpha=0.6)
 plt.scatter(range(len(predictions)), predictions[:, 0], label="Predictions", color="red", alpha=0.6)
-plt.title("True Values vs Predictions (After Continued Training)")
+plt.title("True Values vs Predictions (First Output Dimension)")
 plt.xlabel("Sample Index")
-plt.ylabel("Target Value (First Output Dimension)")
+plt.ylabel("Target Value")
 plt.legend()
+plt.grid(True)
+plt.show()
+
+# 可视化 2: 残差图
+residuals = predictions[:, 0] - true_values[:, 0]
+plt.figure(figsize=(10, 6))
+plt.scatter(range(len(residuals)), residuals, label="Residuals", color="purple", alpha=0.6)
+plt.axhline(0, color="red", linestyle="--", label="Zero Residual")
+plt.title("Residual Plot")
+plt.xlabel("Sample Index")
+plt.ylabel("Residual")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 可视化 3: 分布对比
+plt.figure(figsize=(10, 6))
+plt.hist(true_values[:, 0], bins=20, alpha=0.6, label="True Values", color="blue")
+plt.hist(predictions[:, 0], bins=20, alpha=0.6, label="Predictions", color="orange")
+plt.title("Distribution of True Values and Predictions")
+plt.xlabel("Value")
+plt.ylabel("Frequency")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 可视化 4: R² 分布（多维目标）
+r2_scores = [r2_score(true_values[:, i], predictions[:, i]) for i in range(true_values.shape[1])]
+plt.figure(figsize=(10, 6))
+plt.bar(range(len(r2_scores)), r2_scores, color="skyblue")
+plt.title("R² Scores Across Output Dimensions")
+plt.xlabel("Output Dimension")
+plt.ylabel("R² Score")
+plt.ylim(0, 1)
 plt.grid(True)
 plt.show()

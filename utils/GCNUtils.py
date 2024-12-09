@@ -118,7 +118,6 @@ def evaluate_gnn_model(model, data, label_mapping):
     print("Classification Report:")
     print(report)
 
-
 def plot_training_loss(losses):
     """
     绘制训练损失曲线。

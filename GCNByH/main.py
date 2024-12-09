@@ -27,7 +27,7 @@ def main():
     ], dtype=torch.long)
     node_feature_dim = 8  # 节点特征维度
     hidden_dim = 8  # 隐藏层维度
-    additional_epochs = 2000                                                                                                        # 总训练轮数
+    additional_epochs = 5                                                                                                        # 总训练轮数
     update_interval = 500  # 每 500 次更新模型
     initial_model_path = ("../GCNByH/gcn_model.pth")  # 初始模型路径
     updated_model_path = "../GCNByH/gcn_model.pth"  # 更新模型保存路径
